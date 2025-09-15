@@ -57,8 +57,11 @@
   margin: 0;
   font-weight: normal;
 }
-
+html {
+  font-size: 15px;
+}
 body {
+  position: relative;
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);

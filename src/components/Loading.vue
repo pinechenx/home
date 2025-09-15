@@ -1,14 +1,13 @@
+<script setup>
+import DomainIcon from './icons/IconDomain.vue'
+</script>
 <template>
-  <div class="loading" :class="store.imgLoaded ? 'hide' : ''">
+  <div class="loading">
     <div class="loading-cover"></div>
     <div class="loading-icon"><DomainIcon /></div>
   </div>
 </template>
-<script setup>
-import { store } from '@/store/store.js'
-import DomainIcon from './icons/IconDomain.vue'
-</script>
-<style scoped>
+<style lang="scss" scoped>
 .loading {
   position: fixed;
   top: 0;
@@ -16,12 +15,6 @@ import DomainIcon from './icons/IconDomain.vue'
   width: 100%;
   height: 100%;
   overflow: hidden;
-  opacity: 1;
-
-  &.hide {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
 
   .loading-cover {
     position: absolute;
@@ -29,7 +22,6 @@ import DomainIcon from './icons/IconDomain.vue'
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 998;
     background-color: rgba(0, 0, 0, 0.3);
   }
 
@@ -39,7 +31,6 @@ import DomainIcon from './icons/IconDomain.vue'
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 999;
     display: flex;
     justify-content: center;
     align-items: center;

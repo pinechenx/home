@@ -1,11 +1,5 @@
-<template>
-  <div class="container" v-show="store.imgLoaded">
-    <img :src="wallpaper" class="bg-img" @load="imgLoadComplete" alt="wallpaper" />
-    <div class="cover"></div>
-  </div>
-</template>
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { store } from '@/store/store.js'
 
 const wallpaper = ref('')
@@ -28,7 +22,13 @@ const imgLoadComplete = () => {
   }, delay)
 }
 </script>
-<style scoped>
+<template>
+  <div class="container" v-show="store.imgLoaded">
+    <img :src="wallpaper" class="bg-img" @load="imgLoadComplete" alt="wallpaper" />
+    <div class="cover"></div>
+  </div>
+</template>
+<style lang="scss" scoped>
 .container {
   position: absolute;
   top: 0;
