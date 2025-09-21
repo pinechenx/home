@@ -25,6 +25,12 @@ export default {
       icon: '/images/icons/ghost_color.svg',
     },
     {
+      name: '起始页',
+      desc: '自己用的起始页',
+      url: 'https://start.onlychen.cn/',
+      icon: '/images/icons/beer_mug_color.svg',
+    },
+    {
       name: '随机密码',
       desc: '生成随机密码',
       url: 'https://www.onlychen.cn/random-password-generator/',
