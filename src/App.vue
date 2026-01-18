@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted } from 'vue'
 import { store } from '@/store/store.js'
-import Loading from './components/Loading.vue'
-import Wallpaper from './components/Wallpaper.vue'
-import Main from './components/Main.vue'
-import Footer from './components/Footer.vue'
+import Loading from './components/LoadingView.vue'
+import Wallpaper from './components/WallpaperView.vue'
+import Main from './components/MainView.vue'
+import Footer from './components/FooterView.vue'
 
 onMounted(() => {
   // 控制台输出
