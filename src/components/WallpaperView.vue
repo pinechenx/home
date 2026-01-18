@@ -42,13 +42,15 @@ const imgLoadComplete = () => {
   height: 100%;
   z-index: -1;
   overflow: hidden;
-  transition: 0.25s;
+  transition: opacity 0.25s ease;
   opacity: 0;
-  contain: layout style paint;
+  contain: strict;
+  will-change: opacity;
 
   &.show {
     opacity: 1;
   }
+
   .bg-img {
     position: absolute;
     top: 0;
@@ -59,12 +61,15 @@ const imgLoadComplete = () => {
     backface-visibility: hidden;
     filter: blur(10px) brightness(0.3);
     transform: translateZ(0) scale(1.5);
+    will-change: transform, filter, opacity;
+
     &.animate {
       will-change: transform, filter, opacity;
       animation: fade-blur-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
       animation-delay: 0.36s;
     }
   }
+
   .cover {
     position: absolute;
     top: 0;
@@ -72,6 +77,7 @@ const imgLoadComplete = () => {
     width: 100%;
     height: 100%;
     background-image: radial-gradient(#0000, #00000080), radial-gradient(#0000 33%, #0000004d 166%);
+    contain: layout style paint;
   }
 }
 </style>

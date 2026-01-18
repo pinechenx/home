@@ -1,9 +1,9 @@
 @import './main.css';
 
-// transition 动画
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
 }
 
 .fade-enter-from,
@@ -11,7 +11,6 @@
   opacity: 0;
 }
 
-// keyframes 动画
 @keyframes fade {
   from {
     opacity: 0;
@@ -24,11 +23,11 @@
 @keyframes fade-blur-in {
   from {
     filter: blur(10px) brightness(0.3);
-    transform: translateZ(0) scale(1.5);
+    transform: translate3d(0, 0, 0) scale(1.5);
   }
   to {
     filter: blur(0) brightness(1);
-    transform: translateZ(0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
@@ -39,4 +38,43 @@
   to {
     transform: scale(1);
   }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.virtual-list {
+  contain: strict;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }

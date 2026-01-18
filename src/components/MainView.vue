@@ -90,7 +90,7 @@ onMounted(() => {
       font-size: 1.4rem;
       color: #fff;
       font-family: sans-serif;
-      transition: all 0.3s ease;
+      transition: color 0.3s ease, transform 0.3s ease;
       span {
         color: #747bff;
       }
@@ -112,7 +112,9 @@ onMounted(() => {
         flex-shrink: 0;
         margin-right: 10px;
         background: rgb(247 247 247);
-        transition: all 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        will-change: background-color, transform;
+        transform: translateZ(0);
         &.github:hover {
           background-color: #151b23;
           fill: #fff;
@@ -136,7 +138,7 @@ onMounted(() => {
       color: #fff;
       font-family: sans-serif;
       margin-bottom: 30px;
-      transition: all 0.3s ease;
+      transition: transform 0.3s ease;
     }
     .project-list {
       width: 100%;
@@ -146,7 +148,8 @@ onMounted(() => {
         width: calc(33.33% - 10px);
         margin-right: 15px;
         margin-bottom: 15px;
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        contain: layout style paint;
         &:nth-child(3n) {
           margin-right: 0;
         }
@@ -160,10 +163,14 @@ onMounted(() => {
           border-radius: 8px;
           padding: 15px;
           text-decoration: none;
-          transition: all 0.3s ease;
+          transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+          will-change: transform, box-shadow;
+          transform: translateZ(0);
           &:hover {
             box-shadow: 0 8px 16px -4px #2c2d300c;
-            transform: translateY(-2px);
+            transform: translateY(-2px) translateZ(0);
           }
           .text {
             .name {
@@ -182,7 +189,8 @@ onMounted(() => {
       }
     }
     .skills {
-      transition: all 0.3s ease;
+      transition: opacity 0.3s ease;
+      contain: layout style paint;
       .skills-img1 {
         display: block;
       }
