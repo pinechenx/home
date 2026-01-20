@@ -10,13 +10,37 @@ wallpaper.value = 'https://bing.ee123.net/img/'
 
 // 动画播放时间
 const startTime = ref('')
+const isImageDecoded = ref(false)
+
 onMounted(() => {
   startTime.value = Date.now()
+  preloadAndDecode()
 })
 
-const imgLoadComplete = () => {
+const preloadAndDecode = async () => {
+  try {
+    const img = new Image()
+    img.src = wallpaper.value
+    await new Promise((resolve, reject) => {
+      img.onload = resolve
+      img.onerror = reject
+    })
+    await img.decode()
+    isImageDecoded.value = true
+    const time = Date.now() - startTime.value
+    const delay = time < 1600 ? 1600 - time : 0
+    setTimeout(() => {
+      store.imgLoaded = true
+    }, delay)
+  } catch (error) {
+    console.warn('图片加载失败，使用降级方案', error)
+    handleLoadFailure()
+  }
+}
+
+const handleLoadFailure = () => {
   const time = Date.now() - startTime.value
-  const delay = time < 1600 ? 1600 - time : 0
+  const delay = time < 800 ? 800 - time : 0
   setTimeout(() => {
     store.imgLoaded = true
   }, delay)
@@ -28,8 +52,9 @@ const imgLoadComplete = () => {
       :src="wallpaper"
       class="bg-img"
       :class="{ 'animate': store.imgLoaded }"
-      @load="imgLoadComplete"
-      alt="wallpaper" />
+      decoding="async"
+      loading="eager"
+      :alt="'wallpaper'" />
     <div class="cover"></div>
   </div>
 </template>
@@ -59,8 +84,9 @@ const imgLoadComplete = () => {
     height: 100%;
     object-fit: cover;
     backface-visibility: hidden;
-    filter: blur(10px) brightness(0.3);
     transform: translateZ(0) scale(1.5);
+    isolation: isolate;
+    filter: blur(10px) brightness(0.3);
     will-change: transform, filter, opacity;
 
     &.animate {
