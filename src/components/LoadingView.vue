@@ -16,7 +16,6 @@ import DomainIcon from './icons/IconDomain.vue'
   height: 100%;
   overflow: hidden;
   contain: strict;
-  will-change: opacity;
 
   .loading-cover {
     position: absolute;

@@ -9,9 +9,6 @@ const wallpaper = ref('')
 // bing每日图片
 wallpaper.value = 'https://bing.ee123.net/img/'
 
-// 随机二次元图片
-// wallpaper.value = 'https://www.loliapi.com/acg/pc/'
-
 // 动画播放时间
 const startTime = ref(0)
 const imgRef = ref(null)
@@ -50,16 +47,18 @@ const initImageLoad = async () => {
 
 const handleLoadSuccess = () => {
   const time = Date.now() - startTime.value
-  const minWaitTime = 800
+  const minWaitTime = 600
   const delay = time < minWaitTime ? minWaitTime - time : 0
 
   timer = setTimeout(() => {
-    store.imgLoaded = true
+    requestAnimationFrame(() => {
+      store.imgLoaded = true
+    })
   }, delay)
 }
 </script>
 <template>
-  <div class="container" :class="{ 'show': store.imgLoaded }">
+  <div class="container">
     <img
       ref="imgRef"
       :src="wallpaper"
@@ -69,7 +68,6 @@ const handleLoadSuccess = () => {
       loading="eager"
       draggable="false"
       alt="wallpaper" />
-    <div class="cover"></div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -81,15 +79,7 @@ const handleLoadSuccess = () => {
   height: 100%;
   z-index: -1;
   overflow: hidden;
-  transition: opacity 0.25s ease;
-  opacity: 0;
   contain: strict;
-  will-change: opacity;
-  transition: opacity 0.5s ease;
-
-  &.show {
-    opacity: 1;
-  }
 
   .bg-img {
     position: absolute;
@@ -102,24 +92,12 @@ const handleLoadSuccess = () => {
     transform: translateZ(0) scale(1.2);
     isolation: isolate;
     filter: blur(10px) brightness(0.3);
-    will-change: transform, filter, opacity;
+    will-change: transform, filter;
 
     &.animate {
-      will-change: transform, filter, opacity;
       animation: fade-blur-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
       animation-delay: 0.36s;
     }
-  }
-
-  .cover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(#0000, #00000080), radial-gradient(#0000 33%, #0000004d 166%);
-    contain: layout style paint;
-    pointer-events: none;
   }
 }
 </style>
