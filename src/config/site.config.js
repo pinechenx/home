@@ -36,5 +36,11 @@ export default {
       url: 'https://www.onlychen.cn/random-password-generator/',
       icon: '/images/icons/cookie_color.svg',
     },
+    {
+      name: 'Vue Vben Admin',
+      desc: '常用的企业级中后台解决方案【演示案例】',
+      url: 'https://vben.onlychen.cn/',
+      icon: '/images/icons/tangerine_color.svg',
+    }
   ],
 }

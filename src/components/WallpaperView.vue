@@ -1,47 +1,59 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { store } from '@/store/store.js'
 
 const wallpaper = ref('')
 // 本地图片
 // wallpaper.value = '/images/bg1.jpg'
+
 // bing每日图片
 wallpaper.value = 'https://bing.ee123.net/img/'
 
+// 随机二次元图片
+// wallpaper.value = 'https://www.loliapi.com/acg/pc/'
+
 // 动画播放时间
-const startTime = ref('')
-const isImageDecoded = ref(false)
+const startTime = ref(0)
+const imgRef = ref(null)
+let timer = null
 
 onMounted(() => {
   startTime.value = Date.now()
-  preloadAndDecode()
+  if (imgRef.value) {
+    initImageLoad()
+  }
 })
 
-const preloadAndDecode = async () => {
+onUnmounted(() => {
+  if (timer) clearTimeout(timer)
+})
+
+const initImageLoad = async () => {
   try {
-    const img = new Image()
-    img.src = wallpaper.value
-    await new Promise((resolve, reject) => {
-      img.onload = resolve
-      img.onerror = reject
-    })
-    await img.decode()
-    isImageDecoded.value = true
-    const time = Date.now() - startTime.value
-    const delay = time < 1600 ? 1600 - time : 0
-    setTimeout(() => {
-      store.imgLoaded = true
-    }, delay)
+    const img = imgRef.value
+    if (img.complete) {
+      await img.decode()
+    } else {
+      await new Promise((resolve, reject) => {
+        img.onload = resolve
+        img.onerror = reject
+      })
+      await img.decode()
+    }
+
+    handleLoadSuccess()
   } catch (error) {
-    console.warn('图片加载失败，使用降级方案', error)
-    handleLoadFailure()
+    console.warn('背景图加载/解码失败，执行降级显示', error)
+    handleLoadSuccess()
   }
 }
 
-const handleLoadFailure = () => {
+const handleLoadSuccess = () => {
   const time = Date.now() - startTime.value
-  const delay = time < 800 ? 800 - time : 0
-  setTimeout(() => {
+  const minWaitTime = 800
+  const delay = time < minWaitTime ? minWaitTime - time : 0
+
+  timer = setTimeout(() => {
     store.imgLoaded = true
   }, delay)
 }
@@ -49,12 +61,14 @@ const handleLoadFailure = () => {
 <template>
   <div class="container" :class="{ 'show': store.imgLoaded }">
     <img
+      ref="imgRef"
       :src="wallpaper"
       class="bg-img"
       :class="{ 'animate': store.imgLoaded }"
       decoding="async"
       loading="eager"
-      :alt="'wallpaper'" />
+      draggable="false"
+      alt="wallpaper" />
     <div class="cover"></div>
   </div>
 </template>
@@ -71,6 +85,7 @@ const handleLoadFailure = () => {
   opacity: 0;
   contain: strict;
   will-change: opacity;
+  transition: opacity 0.5s ease;
 
   &.show {
     opacity: 1;
@@ -84,7 +99,7 @@ const handleLoadFailure = () => {
     height: 100%;
     object-fit: cover;
     backface-visibility: hidden;
-    transform: translateZ(0) scale(1.5);
+    transform: translateZ(0) scale(1.2);
     isolation: isolate;
     filter: blur(10px) brightness(0.3);
     will-change: transform, filter, opacity;
@@ -104,6 +119,7 @@ const handleLoadFailure = () => {
     height: 100%;
     background-image: radial-gradient(#0000, #00000080), radial-gradient(#0000 33%, #0000004d 166%);
     contain: layout style paint;
+    pointer-events: none;
   }
 }
 </style>

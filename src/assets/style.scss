@@ -23,7 +23,7 @@
 @keyframes fade-blur-in {
   from {
     filter: blur(10px) brightness(0.3);
-    transform: translate3d(0, 0, 0) scale(1.5);
+    transform: translate3d(0, 0, 0) scale(1.2);
   }
   to {
     filter: blur(0) brightness(1);

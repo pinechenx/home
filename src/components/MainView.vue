@@ -90,7 +90,9 @@ onMounted(() => {
       font-size: 1.4rem;
       color: #fff;
       font-family: sans-serif;
-      transition: color 0.3s ease, transform 0.3s ease;
+      transition:
+        color 0.3s ease,
+        transform 0.3s ease;
       span {
         color: #747bff;
       }
@@ -112,7 +114,9 @@ onMounted(() => {
         flex-shrink: 0;
         margin-right: 10px;
         background: rgb(247 247 247);
-        transition: background-color 0.3s ease, transform 0.2s ease;
+        transition:
+          background-color 0.3s ease,
+          transform 0.2s ease;
         will-change: background-color, transform;
         transform: translateZ(0);
         &.github:hover {
@@ -144,15 +148,13 @@ onMounted(() => {
       width: 100%;
       display: flex;
       flex-wrap: wrap;
+      gap: 15px;
       .item {
         width: calc(33.33% - 10px);
-        margin-right: 15px;
-        margin-bottom: 15px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
         contain: layout style paint;
-        &:nth-child(3n) {
-          margin-right: 0;
-        }
         .list {
           width: 100%;
           height: 100px;
@@ -173,17 +175,26 @@ onMounted(() => {
             transform: translateY(-2px) translateZ(0);
           }
           .text {
+            flex: 1;
             .name {
               font-size: 1.2rem;
               color: #000;
               font-family: sans-serif;
             }
             .desc {
-              margin-top: 10px;
+              margin-top: 6px;
               font-size: 0.8rem;
               color: #494949;
               font-family: sans-serif;
             }
+          }
+          .icon {
+            margin-left: 10px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
       }
@@ -214,9 +225,6 @@ onMounted(() => {
       .project-list {
         .item {
           width: calc(50% - 7.5px);
-          &:nth-child(2n) {
-            margin-right: 0;
-          }
         }
       }
     }
