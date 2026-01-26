@@ -136,12 +136,11 @@ onMounted(() => {
   }
   .right {
     width: 100%;
-    margin-top: 24px;
     .title {
+      margin: 24px 0 16px 0;
       font-size: 2rem;
       color: #fff;
       font-family: sans-serif;
-      margin-bottom: 30px;
       transition: transform 0.3s ease;
     }
     .project-list {

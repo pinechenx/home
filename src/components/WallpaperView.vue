@@ -2,23 +2,21 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { store } from '@/store/store.js'
 
-const wallpaper = ref('')
+let imgUrl
 // 本地图片
-// wallpaper.value = '/images/bg1.jpg'
+// imgUrl = '/images/bg1.jpg'
 
 // bing每日图片
-wallpaper.value = 'https://bing.ee123.net/img/'
+imgUrl = 'https://bing.ee123.net/img/'
 
 // 动画播放时间
 const startTime = ref(0)
-const imgRef = ref(null)
+const activeWallpaper = ref('')
 let timer = null
 
 onMounted(() => {
   startTime.value = Date.now()
-  if (imgRef.value) {
-    initImageLoad()
-  }
+  initImageLoad()
 })
 
 onUnmounted(() => {
@@ -27,16 +25,9 @@ onUnmounted(() => {
 
 const initImageLoad = async () => {
   try {
-    const img = imgRef.value
-    if (img.complete) {
-      await img.decode()
-    } else {
-      await new Promise((resolve, reject) => {
-        img.onload = resolve
-        img.onerror = reject
-      })
-      await img.decode()
-    }
+    const loader = new Image()
+    loader.src = imgUrl
+    await loader.decode()
 
     handleLoadSuccess()
   } catch (error) {
@@ -51,8 +42,11 @@ const handleLoadSuccess = () => {
   const delay = time < minWaitTime ? minWaitTime - time : 0
 
   timer = setTimeout(() => {
+    activeWallpaper.value = imgUrl
     requestAnimationFrame(() => {
-      store.imgLoaded = true
+      requestAnimationFrame(() => {
+        store.imgLoaded = true
+      })
     })
   }, delay)
 }
@@ -60,8 +54,7 @@ const handleLoadSuccess = () => {
 <template>
   <div class="container">
     <img
-      ref="imgRef"
-      :src="wallpaper"
+      :src="activeWallpaper"
       class="bg-img"
       :class="{ 'animate': store.imgLoaded }"
       decoding="async"
