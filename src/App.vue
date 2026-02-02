@@ -1,10 +1,11 @@
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { store } from '@/store/store.js'
-import Loading from './components/LoadingView.vue'
 import Wallpaper from './components/WallpaperView.vue'
 import Main from './components/MainView.vue'
 import Footer from './components/FooterView.vue'
+
+const showMain = ref(false)
 
 onMounted(() => {
   // 控制台输出
@@ -19,26 +20,36 @@ onMounted(() => {
   `
   const content = `
   https://onlychen.cn
-  
+
   https://github.com/pinechenx/home
   `
   console.info(` %c${title} %c${content}`, styleTitle, styleContent)
 })
+
+watch(
+  () => store.imgLoaded,
+  loaded => {
+    if (loaded) {
+      setTimeout(() => {
+        showMain.value = true
+      }, 900)
+    }
+  },
+)
 </script>
 <template>
   <Wallpaper />
-  <Transition name="fade" mode="out-in">
-    <Loading v-if="!store.imgLoaded" />
-    <main v-else>
-      <Main />
-      <Footer />
-    </main>
-  </Transition>
+  <main v-if="showMain">
+    <Main />
+    <Footer />
+  </main>
 </template>
 <style scoped>
 main {
   max-width: 1200px;
   margin: 0 auto;
   padding: 10px;
+  contain: layout style paint layout;
+  animation: fade 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 </style>

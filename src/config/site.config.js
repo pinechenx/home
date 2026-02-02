@@ -41,6 +41,12 @@ export default {
       desc: '常用的企业级中后台解决方案【演示案例】',
       url: 'https://vben.onlychen.cn/',
       icon: '/images/icons/tangerine_color.svg',
+    },
+    {
+      name: 'Vue Pure Admin',
+      desc: '开箱即用的中后台管理系统模版【演示案例】',
+      url: 'https://pure-admin.onlychen.cn/',
+      icon: '/images/icons/blueberries_color.svg',
     }
   ],
 }

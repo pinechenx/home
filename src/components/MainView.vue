@@ -153,7 +153,7 @@ onMounted(() => {
         transition:
           transform 0.3s ease,
           box-shadow 0.3s ease;
-        contain: layout style paint;
+
         .list {
           width: 100%;
           height: 100px;

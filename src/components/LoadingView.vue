@@ -10,6 +10,7 @@ import DomainIcon from './icons/IconDomain.vue'
 <style lang="scss" scoped>
 .loading {
   position: fixed;
+  z-index: 9999;
   top: 0;
   left: 0;
   width: 100%;
@@ -18,16 +19,16 @@ import DomainIcon from './icons/IconDomain.vue'
   contain: strict;
 
   .loading-cover {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.6);
   }
 
   .loading-icon {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
