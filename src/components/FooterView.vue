@@ -1,10 +1,21 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import siteConfig from '@/config/site.config.js'
-const policeFilingUrl = `https://beian.mps.gov.cn/#/query/webSearch?code=${siteConfig.policeFilingNumber.match(/\d+/)[0]}`
+
+const currentYear = ref(new Date().getFullYear())
+
+onMounted(() => {
+  // 更新年份
+  currentYear.value = new Date().getFullYear()
+})
+
+const policeFilingUrl = siteConfig.policeFilingNumber
+  ? `https://beian.mps.gov.cn/#/query/webSearch?code=${siteConfig.policeFilingNumber.match(/\d+/)[0]}`
+  : ''
 </script>
 <template>
   <footer>
-    <span class="text">Copyright © {{ new Date().getFullYear() }}</span>
+    <span class="text">Copyright © {{ currentYear }}</span>
     <span class="text hide2">Made by {{ siteConfig.author }}</span>
     <span class="text hide1" v-if="siteConfig.icpFilingNumber">
       <a class="link" href="https://beian.miit.gov.cn" target="_blank">{{ siteConfig.icpFilingNumber }}</a>
@@ -14,15 +25,11 @@ const policeFilingUrl = `https://beian.mps.gov.cn/#/query/webSearch?code=${siteC
       <a class="link" :href="policeFilingUrl" target="_blank">{{ siteConfig.policeFilingNumber }}</a>
     </span>
   </footer>
-  <div class="box"></div>
 </template>
 <style lang="scss" scoped>
 footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100%;
-  height: 2.5rem;
+  padding: 16px 10px;
   background: rgba(0, 0, 0, 0.15);
   opacity: 0.5;
   display: flex;
@@ -31,6 +38,12 @@ footer {
   font-size: 13px;
   z-index: 1;
   white-space: nowrap;
+  transition: opacity 0.3s ease;
+  margin-top: auto;
+
+  &:hover {
+    opacity: 0.8;
+  }
 
   .text {
     color: #fff;
@@ -39,7 +52,9 @@ footer {
     .link {
       color: #fff;
       text-decoration: none;
+      transition: opacity 0.3s ease;
       &:hover {
+        opacity: 0.8;
         text-decoration: underline;
       }
     }
@@ -51,9 +66,6 @@ footer {
     }
   }
 }
-.box {
-  height: 2.5rem;
-}
 
 @media (max-width: 768px) {
   .hide1 {
@@ -63,6 +75,13 @@ footer {
 @media (max-width: 480px) {
   .hide2 {
     display: none;
+  }
+  footer {
+    flex-wrap: wrap;
+    gap: 4px;
+    .text {
+      padding: 0 3px;
+    }
   }
 }
 </style>

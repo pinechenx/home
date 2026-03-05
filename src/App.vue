@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { store } from '@/store/store.js'
+import Loading from './components/LoadingView.vue'
 import Wallpaper from './components/WallpaperView.vue'
 import Main from './components/MainView.vue'
 import Footer from './components/FooterView.vue'
@@ -38,17 +39,21 @@ watch(
 )
 </script>
 <template>
+  <Loading v-if="!store.imgLoaded" />
   <Wallpaper />
-  <main v-if="showMain">
+  <div class="app-container" v-if="showMain">
     <Main />
     <Footer />
-  </main>
+  </div>
 </template>
 <style scoped>
-main {
-  max-width: 1200px;
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 10px;
+  padding: 15px 15px 0 15px;
   contain: layout style paint layout;
   animation: fade 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

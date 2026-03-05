@@ -25,6 +25,7 @@ import DomainIcon from './icons/IconDomain.vue'
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
+    animation: fade-in 0.3s ease forwards;
   }
 
   .loading-icon {
@@ -38,35 +39,37 @@ import DomainIcon from './icons/IconDomain.vue'
     align-items: center;
     flex-direction: column;
     :deep(path) {
-      stroke-dasharray: 2400;
-      stroke-dashoffset: 2400;
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
       fill: transparent;
-      animation: draw 3s linear infinite both;
+      animation: draw 1.5s ease-in-out infinite;
       stroke-width: 2px;
       stroke: white;
     }
   }
 }
 
-@keyframes draw {
-  0% {
-    stroke-dashoffset: 1px;
-    stroke-dasharray: 0 2400;
+@keyframes fade-in {
+  from {
     opacity: 0;
   }
-  10% {
+  to {
     opacity: 1;
   }
-  45% {
-    stroke-dasharray: 2400 0;
-  }
+}
 
-  65% {
-    stroke-dasharray: 2400 0;
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 200;
+    opacity: 0.3;
   }
-  95%,
-  to {
-    stroke-dasharray: 0 2400;
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -200;
+    opacity: 0.3;
   }
 }
 </style>

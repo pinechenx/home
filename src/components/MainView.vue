@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 import siteConfig from '@/config/site.config.js'
 import NameIcon from '@/components/icons/IconName.vue'
 import GitHubIcon from '@/components/icons/IconGithub.vue'
@@ -9,6 +9,9 @@ const hitokotoData = reactive({
   text: 'Loading...',
   from: '無名',
 })
+const isLoading = ref(true)
+const projectsVisible = ref(false)
+const skillsVisible = ref(false)
 
 const fetchHitokoto = async () => {
   try {
@@ -20,12 +23,23 @@ const fetchHitokoto = async () => {
     hitokotoData.text = data.hitokoto
     hitokotoData.from = data.from
   } catch (error) {
+    hitokotoData.text = '记录每一天的成长'
+    hitokotoData.from = '开发者'
     console.error(error)
+  } finally {
+    isLoading.value = false
   }
 }
 
 onMounted(() => {
   fetchHitokoto()
+  // 项目卡片入场动画
+  setTimeout(() => {
+    projectsVisible.value = true
+  }, 300)
+  setTimeout(() => {
+    skillsVisible.value = true
+  }, 500)
 })
 </script>
 <template>
@@ -35,8 +49,11 @@ onMounted(() => {
         <span style="margin-right: 10px">Hello I'm</span>
         <NameIcon />
       </div>
-      <p class="text">👦 <span>Full Stack</span> Developer</p>
-      <p class="text">📝 {{ hitokotoData.text }} -「 {{ hitokotoData.from }} 」</p>
+      <p class="text">Full Stack Developer</p>
+      <p class="text hitokoto" :class="{ loading: isLoading }">
+        <span v-if="!isLoading">📝</span>
+        {{ hitokotoData.text }} -「 {{ hitokotoData.from }} 」
+      </p>
       <div class="links">
         <a class="item github" :href="siteConfig.github" target="_blank">
           <GitHubIcon />
@@ -47,9 +64,15 @@ onMounted(() => {
       </div>
     </div>
     <div class="right">
-      <div class="title">Projects</div>
+      <div class="title" :class="{ visible: projectsVisible }">Projects</div>
       <div class="project-list">
-        <div class="item" v-for="item in siteConfig.projects" :key="item.name">
+        <div
+          class="item"
+          v-for="(item, index) in siteConfig.projects"
+          :key="item.name"
+          :class="{ visible: projectsVisible }"
+          :style="{ transitionDelay: `${index * 0.1}s` }"
+        >
           <a class="list" :href="item.url" target="_blank">
             <div class="text">
               <div class="name">{{ item.name }}</div>
@@ -61,8 +84,8 @@ onMounted(() => {
           </a>
         </div>
       </div>
-      <div class="title">Skills</div>
-      <div class="skills">
+      <div class="title" :class="{ visible: skillsVisible }">Skills</div>
+      <div class="skills" :class="{ visible: skillsVisible }">
         <img class="skills-img1" width="100%" src="/images/icons/skills1.svg" alt="skills image" />
         <img class="skills-img2" width="100%" src="/images/icons/skills2.svg" alt="skills image" />
       </div>
@@ -71,7 +94,7 @@ onMounted(() => {
 </template>
 <style lang="scss" scoped>
 .content {
-  margin-top: 120px;
+  margin-top: 80px;
   .left {
     width: 100%;
     padding-right: 10px;
@@ -93,8 +116,10 @@ onMounted(() => {
       transition:
         color 0.3s ease,
         transform 0.3s ease;
-      span {
-        color: #747bff;
+      &.hitokoto {
+        &.loading {
+          opacity: 0.5;
+        }
       }
     }
     .links {
@@ -102,7 +127,7 @@ onMounted(() => {
       width: 100%;
       display: flex;
       align-items: center;
-      overflow-x: auto;
+      gap: 10px;
       .item {
         width: 49px;
         height: 43px;
@@ -112,24 +137,30 @@ onMounted(() => {
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        margin-right: 10px;
         background: rgb(247 247 247);
         transition:
           background-color 0.3s ease,
           transform 0.2s ease;
         will-change: background-color, transform;
         transform: translateZ(0);
-        &.github:hover {
-          background-color: #151b23;
-          fill: #fff;
-        }
-        &.mail:hover {
-          background-color: rgba(0, 176, 255, 1);
-          fill: #fff;
-        }
         svg {
           width: 22px;
           height: 22px;
+          transition: fill 0.3s ease, stroke 0.3s ease;
+        }
+        &.github:hover {
+          background-color: #151b23;
+          svg {
+            fill: #fff;
+            stroke: #fff;
+          }
+        }
+        &.mail:hover {
+          background-color: rgba(0, 176, 255, 1);
+          svg {
+            fill: #fff;
+            stroke: #fff;
+          }
         }
       }
     }
@@ -141,7 +172,13 @@ onMounted(() => {
       font-size: 2rem;
       color: #fff;
       font-family: sans-serif;
-      transition: transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      &.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     .project-list {
       width: 100%;
@@ -150,9 +187,16 @@ onMounted(() => {
       gap: 15px;
       .item {
         width: calc(33.33% - 10px);
+        opacity: 0;
+        transform: translateY(20px);
         transition:
-          transform 0.3s ease,
+          opacity 0.4s ease,
+          transform 0.4s ease,
           box-shadow 0.3s ease;
+        &.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
 
         .list {
           width: 100%;
@@ -199,8 +243,14 @@ onMounted(() => {
       }
     }
     .skills {
-      transition: opacity 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
       contain: layout style paint;
+      &.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
       .skills-img1 {
         display: block;
       }
@@ -215,6 +265,9 @@ onMounted(() => {
     .left {
       .text {
         font-size: 1.2rem;
+      }
+      .welcome {
+        font-size: 1.6rem;
       }
     }
     .right {
@@ -231,6 +284,15 @@ onMounted(() => {
 }
 @media (max-width: 480px) {
   .content {
+    .left {
+      .welcome {
+        font-size: 1.4rem;
+        flex-wrap: wrap;
+      }
+      .text {
+        font-size: 1.1rem;
+      }
+    }
     .right {
       .title {
         font-size: 1.6rem;
@@ -239,6 +301,10 @@ onMounted(() => {
         .item {
           width: 100%;
           margin-right: 0;
+          .list {
+            height: auto;
+            min-height: 80px;
+          }
         }
       }
       .skills {
