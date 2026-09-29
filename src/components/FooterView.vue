@@ -29,8 +29,8 @@ const policeFilingUrl = siteConfig.policeFilingNumber
 <style lang="scss" scoped>
 footer {
   width: 100%;
-  padding: 16px 10px;
-  background: rgba(0, 0, 0, 0.15);
+  padding: 16px 0;
+  //background: rgba(0, 0, 0, 0.15);
   opacity: 0.5;
   display: flex;
   align-items: center;
