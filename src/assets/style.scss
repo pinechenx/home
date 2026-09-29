@@ -20,17 +20,6 @@
   }
 }
 
-@keyframes fade-blur-in {
-  from {
-    filter: blur(10px) brightness(0.3);
-    transform: translate3d(0, 0, 0) scale(1.2);
-  }
-  to {
-    filter: blur(0) brightness(0.85);
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-}
-
 @keyframes fade-blur-main-in {
   from {
     transform: scale(1.2);

@@ -16,8 +16,8 @@ const policeFilingUrl = siteConfig.policeFilingNumber
 <template>
   <footer>
     <span class="text">Copyright © {{ currentYear }}</span>
-    <span class="text hide2">Made by {{ siteConfig.author }}</span>
-    <span class="text hide1" v-if="siteConfig.icpFilingNumber">
+    <span class="text">Made by {{ siteConfig.author }}</span>
+    <span class="text" v-if="siteConfig.icpFilingNumber">
       <a class="link" href="https://beian.miit.gov.cn" target="_blank">{{ siteConfig.icpFilingNumber }}</a>
     </span>
     <span class="text" v-if="siteConfig.policeFilingNumber">
@@ -33,8 +33,10 @@ footer {
   //background: rgba(0, 0, 0, 0.15);
   opacity: 0.5;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  row-gap: 4px;
   font-size: 13px;
   z-index: 1;
   white-space: nowrap;
@@ -67,18 +69,8 @@ footer {
   }
 }
 
-@media (max-width: 768px) {
-  .hide1 {
-    display: none;
-  }
-}
 @media (max-width: 480px) {
-  .hide2 {
-    display: none;
-  }
   footer {
-    flex-wrap: wrap;
-    gap: 4px;
     .text {
       padding: 0 3px;
     }

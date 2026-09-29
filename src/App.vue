@@ -28,18 +28,22 @@ onMounted(() => {
 })
 
 watch(
-  () => store.imgLoaded,
-  loaded => {
-    if (loaded) {
-      setTimeout(() => {
-        showMain.value = true
-      }, 900)
-    }
+  () => store.imgLoaded && store.signWritten,
+  ready => {
+    if (!ready) return
+    // 壁纸就绪且签名写完，开始揭幕；主内容稍后淡入
+    store.reveal = true
+    setTimeout(() => {
+      showMain.value = true
+    }, 900)
   },
+  { immediate: true },
 )
 </script>
 <template>
-  <Loading v-if="!store.imgLoaded" />
+  <Transition name="fade">
+    <Loading v-if="!store.reveal" />
+  </Transition>
   <Wallpaper />
   <div class="app-container" v-if="showMain">
     <Main />

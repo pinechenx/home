@@ -1,38 +1,15 @@
 <script setup>
-import { reactive, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { store, fetchHitokoto } from '@/store/store.js'
 import siteConfig from '@/config/site.config.js'
 import NameIcon from '@/components/icons/IconName.vue'
 import GitHubIcon from '@/components/icons/IconGithub.vue'
 import MailIcon from '@/components/icons/IconMail.vue'
 
-const hitokotoData = reactive({
-  text: 'Loading...',
-  from: '無名',
-})
-const isLoading = ref(true)
 const projectsVisible = ref(false)
 const skillsVisible = ref(false)
 
-const fetchHitokoto = async () => {
-  try {
-    const response = await fetch('https://v1.hitokoto.cn')
-    if (!response.ok) {
-      throw new Error(`error: ${response.status} ${response.statusText}`)
-    }
-    const data = await response.json()
-    hitokotoData.text = data.hitokoto
-    hitokotoData.from = data.from
-  } catch (error) {
-    hitokotoData.text = '记录每一天的成长'
-    hitokotoData.from = '开发者'
-    console.error(error)
-  } finally {
-    isLoading.value = false
-  }
-}
-
 onMounted(() => {
-  fetchHitokoto()
   // 项目卡片入场动画
   setTimeout(() => {
     projectsVisible.value = true
@@ -50,9 +27,11 @@ onMounted(() => {
         <NameIcon />
       </div>
       <p class="text">Full Stack Developer</p>
-      <p class="text hitokoto" :class="{ loading: isLoading }">
-        <span v-if="!isLoading">📝</span>
-        {{ hitokotoData.text }} -「 {{ hitokotoData.from }} 」
+      <p class="text hitokoto" :class="{ loading: store.hitokoto.loading }">
+        <span class="refresh" title="双击刷新" @dblclick="fetchHitokoto">
+          <span v-if="!store.hitokoto.loading">📝</span>
+          {{ store.hitokoto.text }} -「 {{ store.hitokoto.from }} 」
+        </span>
       </p>
       <div class="links">
         <a class="item github" :href="siteConfig.github" target="_blank">
@@ -71,8 +50,7 @@ onMounted(() => {
           v-for="(item, index) in siteConfig.projects"
           :key="item.name"
           :class="{ visible: projectsVisible }"
-          :style="{ transitionDelay: `${index * 0.1}s` }"
-        >
+          :style="{ transitionDelay: `${index * 0.1}s` }">
           <a class="list" :href="item.url" target="_blank">
             <div class="text">
               <div class="name">{{ item.name }}</div>
@@ -120,6 +98,10 @@ onMounted(() => {
         &.loading {
           opacity: 0.5;
         }
+        .refresh {
+          cursor: pointer;
+          user-select: none;
+        }
       }
     }
     .links {
@@ -146,7 +128,9 @@ onMounted(() => {
         svg {
           width: 22px;
           height: 22px;
-          transition: fill 0.3s ease, stroke 0.3s ease;
+          transition:
+            fill 0.3s ease,
+            stroke 0.3s ease;
         }
         &.github:hover {
           background-color: #151b23;
@@ -174,7 +158,9 @@ onMounted(() => {
       font-family: sans-serif;
       opacity: 0;
       transform: translateY(10px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
       &.visible {
         opacity: 1;
         transform: translateY(0);
@@ -245,7 +231,9 @@ onMounted(() => {
     .skills {
       opacity: 0;
       transform: translateY(10px);
-      transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+      transition:
+        opacity 0.5s ease 0.2s,
+        transform 0.5s ease 0.2s;
       contain: layout style paint;
       &.visible {
         opacity: 1;
